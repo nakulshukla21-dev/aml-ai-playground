@@ -1,5 +1,13 @@
 import anthropic
-import fitz  # this is pymupdf
+import fitz
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # loads the .env file
+
+# Set up the Anthropic client
+
+client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 # Open and extract text from a PDF
 doc = fitz.open("document.pdf")
@@ -7,8 +15,6 @@ document_text = ""
 for page in doc:
     document_text += page.get_text()
 
-# Set up the Anthropic client
-client = anthropic.Anthropic(api_key="YOUR_API_KEY_HERE")
 # Send to Claude for summary
 message = client.messages.create(
     model="claude-sonnet-4-6",
