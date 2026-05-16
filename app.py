@@ -21,19 +21,45 @@ if uploaded_file is not None:
     st.info("Document uploaded successfully. Click below to summarize.")
 
     if st.button("Summarize"):
-        with st.spinner("Analyzing document..."):
-          ##  client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-            client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
-            message = client.messages.create(
-                model="claude-sonnet-4-6",
-                max_tokens=1024,
+        client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
+
+        with st.spinner("Checking document relevance..."):
+            relevance_check = client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=10,
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Summarize the following AML/KYC regulatory document in 5 bullet points, focusing on key compliance implications:\n\n{document_text[:5000]}"
+                        "content": (
+                            "Does the following document relate to AML (Anti-Money Laundering), "
+                            "KYC (Know Your Customer), financial compliance, or related regulatory topics? "
+                            "Reply with only 'yes' or 'no'.\n\n"
+                            f"{document_text[:2000]}"
+                        )
                     }
                 ]
             )
 
-        st.subheader("Summary")
-        st.write(message.content[0].text)
+        is_aml_related = relevance_check.content[0].text.strip().lower().startswith("yes")
+
+        if not is_aml_related:
+            st.error(
+                "This document doesn't appear to be AML/KYC related. "
+                "Please upload a regulatory document covering topics such as Anti-Money Laundering, "
+                "Know Your Customer, or financial compliance."
+            )
+        else:
+            with st.spinner("Analyzing document..."):
+                message = client.messages.create(
+                    model="claude-sonnet-4-6",
+                    max_tokens=1024,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": f"Summarize the following AML/KYC regulatory document in 5 bullet points, focusing on key compliance implications:\n\n{document_text[:5000]}"
+                        }
+                    ]
+                )
+
+            st.subheader("Summary")
+            st.write(message.content[0].text)
