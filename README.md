@@ -6,14 +6,14 @@ An AI-powered tool that summarizes AML/KYC regulatory documents using the Claude
 [Try it here](https://bit.ly/aml-summarizer)
 
 ## What it does
-Upload any FATF recommendation, FinCEN advisory, or AML/KYC regulatory document (PDF) and get a concise 5-point summary of the key compliance implications — in seconds.
+Upload any FATF recommendation, FinCEN advisory, or AML/KYC regulatory document (PDF) and get a concise 5-point summary of the key compliance implications — in seconds. The app automatically checks whether the uploaded document is AML/KYC related and shows a friendly error if it isn't.
 
 ## Why it matters
 AML/KYC compliance teams deal with dense, lengthy regulatory documents. This tool demonstrates how LLMs can accelerate regulatory review and support compliance workflows in financial institutions.
 
 ## Tech stack
 - Python
-- Anthropic Claude API (claude-sonnet-4-6)
+- Anthropic Claude API (claude-haiku for relevance check, claude-sonnet-4-6 for summarization)
 - Streamlit (web interface + cloud deployment)
 - PyMuPDF for PDF extraction
 - python-dotenv for secure key management
