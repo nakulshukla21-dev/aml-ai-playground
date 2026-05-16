@@ -22,8 +22,8 @@ if uploaded_file is not None:
 
     if st.button("Summarize"):
         with st.spinner("Analyzing document..."):
-            client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-            
+          ##  client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+            client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
             message = client.messages.create(
                 model="claude-sonnet-4-6",
                 max_tokens=1024,
