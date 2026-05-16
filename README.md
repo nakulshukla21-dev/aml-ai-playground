@@ -1,4 +1,4 @@
- AML Document Summarizer
+## AML Document Summarizer
 
 An AI-powered tool that summarizes AML/KYC regulatory documents using the Claude API.
 
